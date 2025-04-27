@@ -1,12 +1,25 @@
-﻿// blockchain.cpp : Defines the entry point for the application.
-//
+#include "Blockchain.h"
+#include <sstream>
 
-#include "blockchain.h"
-
-using namespace std;
-
-int main()
+std::string Blockchain::toString() const
 {
-	cout << "Hello CMake." << endl;
-	return 0;
+    std::ostringstream oss;
+    oss << "=== Blockchain ===" << "\n"
+        << "Chain Height: " << chain.size() << "\n";
+    if (!chain.empty()) {
+        oss << "\nBlockchain Summary:\n";
+        oss << "Genesis Block: " << chain[0].hash() << "\n";
+        oss << "Last Block: " << chain.back().hash() << "\n";
+        oss << "\nBlocks:\n";
+        for (const auto& block : chain) {
+            oss << block.toString() << "\n";
+        }
+    }
+    oss << "===================";
+    return oss.str();
+}
+
+void Blockchain::addBlock(const Block& newBlock)
+{
+	chain.push_back(newBlock);
 }

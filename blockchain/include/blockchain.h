@@ -1,8 +1,14 @@
-﻿// blockchain.h : Include file for standard system include files,
-// or project specific include files.
-
 #pragma once
 
-#include <iostream>
+#include "Block.h"
+#include <vector>
 
-// TODO: Reference additional headers your program requires here.
+class Blockchain
+{
+public:
+	void addBlock(const Block& newBlock);
+public:
+	std::string toString() const;
+private:
+	std::vector<Block> chain;
+};
