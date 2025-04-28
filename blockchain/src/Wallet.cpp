@@ -13,12 +13,12 @@ Wallet::Wallet(double balance)
 std::string Wallet::toString() const
 {
 	std::ostringstream oss;
-	oss << "=== Wallet ===" << "\n"
+	oss << "=== Wallet (B) ===" << "\n"
 		<< "Public Key: " << publicKey << "\n"
 		<< "Private Key: [HIDDEN]" << "\n"
 		<< "Balance: " << balance << " coins" << "\n"
 		<< "Hash: " << hash() << "\n"
-		<< "=================";
+		<< "=== Wallet (E) ===";
 	return oss.str();
 }
 

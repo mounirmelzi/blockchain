@@ -4,18 +4,17 @@
 std::string Blockchain::toString() const
 {
     std::ostringstream oss;
-    oss << "=== Blockchain ===" << "\n"
-        << "Chain Height: " << chain.size() << "\n";
+    oss << "==== Blockchain (B) ====" << "\n"
+        << "Chain Length: " << chain.size() << "\n";
     if (!chain.empty()) {
         oss << "\nBlockchain Summary:\n";
         oss << "Genesis Block: " << chain[0].hash() << "\n";
         oss << "Last Block: " << chain.back().hash() << "\n";
-        oss << "\nBlocks:\n";
         for (const auto& block : chain) {
-            oss << block.toString() << "\n";
+            oss << "\n" << block.toString() << "\n";
         }
     }
-    oss << "===================";
+    oss << "==== Blockchain (E) ====";
     return oss.str();
 }
 

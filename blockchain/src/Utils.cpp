@@ -3,6 +3,7 @@
 #include <cryptopp/hex.h>
 #include <cryptopp/rsa.h>
 #include <cryptopp/osrng.h>
+#include "cryptopp/base64.h"
 
 using namespace CryptoPP;
 
@@ -21,13 +22,16 @@ std::pair<std::string, std::string> Utils::generateRSAKeyPair(unsigned int keySi
     privateKey.GenerateRandomWithKeySize(rng, keySize);
     RSA::PublicKey publicKey(privateKey);
 
-    std::string publicKeyStr, privateKeyStr;
+    std::string publicKeyBin, privateKeyBin;
+    std::string publicKeyBase64, privateKeyBase64;
 
-    StringSink publicSink(publicKeyStr);
+    StringSink publicSink(publicKeyBin);
     publicKey.Save(publicSink);
-
-    StringSink privateSink(privateKeyStr);
+    StringSource(publicKeyBin, true, new Base64Encoder(new StringSink(publicKeyBase64), false));
+    
+    StringSink privateSink(privateKeyBin);
     privateKey.Save(privateSink);
+    StringSource(privateKeyBin, true, new Base64Encoder(new StringSink(privateKeyBase64), false));
 
-    return { publicKeyStr, privateKeyStr };
+    return { publicKeyBase64, privateKeyBase64 };
 }

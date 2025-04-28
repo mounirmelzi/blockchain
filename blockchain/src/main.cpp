@@ -1,7 +1,7 @@
 ﻿#include "Blockchain.h"
 #include <iostream>
 
-int main() 
+int main(int argc, char *argv[])
 {
     Wallet system(9999.99), genesis(0.0);
     Blockchain blockchain;

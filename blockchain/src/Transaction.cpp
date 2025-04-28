@@ -16,13 +16,13 @@ Transaction::Transaction(Wallet sender, Wallet receiver, double amount)
 std::string Transaction::toString() const
 {
     std::ostringstream oss;
-    oss << "=== Transaction ===" << "\n"
-        << "Sender: " << sender.hash() << "\n"
-        << "Receiver: " << receiver.hash() << "\n"
+    oss << "=== Transaction (B) ===" << "\n"
+        << "Sender: \n" << sender.toString() << "\n"
+        << "Receiver: \n" << receiver.toString() << "\n"
         << "Amount: " << amount << " coins" << "\n"
         << "Timestamp: " << timestamp << "\n"
         << "Hash: " << hash() << "\n"
-        << "====================";
+        << "=== Transaction (E) ===";
     return oss.str();
 }
 

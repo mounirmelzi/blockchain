@@ -16,19 +16,19 @@ Block::Block(std::string previousHash)
 std::string Block::toString() const
 {
     std::ostringstream oss;
-    oss << "=== Block ===" << "\n"
+    oss << "==== Block (B) ====" << "\n"
         << "Previous Hash: " << previousHash << "\n"
         << "Timestamp: " << timestamp << "\n"
         << "Merkle Root: " << calculateMerkleTreeRootHash() << "\n"
         << "Block Hash: " << hash() << "\n"
         << "Transaction Count: " << transactions.size() << "\n";
     if (!transactions.empty()) {
-        oss << "\nTransactions:\n";
+        oss << "Transactions:\n";
         for (const auto& tx : transactions) {
             oss << tx.toString() << "\n";
         }
     }
-    oss << "=============";
+    oss << "==== Block (E) ====";
     return oss.str();
 }
 
