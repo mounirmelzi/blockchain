@@ -48,6 +48,27 @@ void Block::addTransaction(const Transaction& transaction)
     transactions.push_back(transaction);
 }
 
+bool Block::validate() const
+{
+    if (transactions.empty()) return false;
+
+    double balance = transactions[0].getSender().getBalance();
+    for (const auto& transaction : transactions)
+    {
+        if (balance < transaction.getAmount()) return false;
+        balance -= transaction.getAmount();
+	}
+
+    return true;
+}
+
+void Block::commit()
+{
+	for (auto& transaction : transactions) {
+		transaction.commit();
+	}
+}
+
 std::string Block::calculateMerkleTreeRootHash() const
 {
     if (transactions.empty()) {

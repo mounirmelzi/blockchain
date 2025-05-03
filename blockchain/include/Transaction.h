@@ -6,13 +6,16 @@
 class Transaction
 {
 public:
-	Transaction(Wallet sender, Wallet receiver, double amount);
+	Transaction(Wallet& sender, Wallet& receiver, double amount);
 	std::string hash() const;
-public:
+	void commit();
 	std::string toString() const;
+	Wallet getSender() const;
+	Wallet getReceiver() const;
+	double getAmount() const;
 private:
-	Wallet sender;
-	Wallet receiver;
+	Wallet& sender;
+	Wallet& receiver;
 	double amount;
 	std::string timestamp;
 };

@@ -10,7 +10,8 @@ public:
 	Block(std::string previousHash);
 	std::string hash() const;
 	void addTransaction(const Transaction& transaction);
-public:
+	bool validate() const;
+	void commit();
 	std::string toString() const;
 	void setNonce(int nonce);
 private:

@@ -22,3 +22,8 @@ void Blockchain::addBlock(const Block& newBlock)
 {
 	chain.push_back(newBlock);
 }
+
+Block Blockchain::getLastBlock() const
+{
+    return chain.back();
+}

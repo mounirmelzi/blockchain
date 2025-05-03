@@ -27,9 +27,19 @@ std::string Wallet::getPublicKey() const
 	return publicKey;
 }
 
+std::string Wallet::getPrivateKey() const
+{
+	return privateKey;
+}
+
 double Wallet::getBalance() const
 {
 	return balance;
+}
+
+void Wallet::setBalance(double balance)
+{
+	this->balance = balance;
 }
 
 std::string Wallet::hash() const
