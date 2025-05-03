@@ -12,10 +12,12 @@ public:
 	void addTransaction(const Transaction& transaction);
 public:
 	std::string toString() const;
+	void setNonce(int nonce);
 private:
 	std::string calculateMerkleTreeRootHash() const;
 private:
 	std::vector<Transaction> transactions;
 	std::string timestamp;
 	std::string previousHash;
+	int nonce;
 };

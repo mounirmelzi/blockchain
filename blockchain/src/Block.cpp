@@ -5,7 +5,7 @@
 #include <sstream>
 
 Block::Block(std::string previousHash)
-	: previousHash(previousHash)
+	: previousHash(previousHash), nonce(0)
 {
 	auto now = std::chrono::system_clock::now();
 	std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
@@ -19,6 +19,7 @@ std::string Block::toString() const
     oss << "==== Block (B) ====" << "\n"
         << "Previous Hash: " << previousHash << "\n"
         << "Timestamp: " << timestamp << "\n"
+        << "Nonce: " << nonce << "\n"
         << "Merkle Root: " << calculateMerkleTreeRootHash() << "\n"
         << "Block Hash: " << hash() << "\n"
         << "Transaction Count: " << transactions.size() << "\n";
@@ -32,9 +33,14 @@ std::string Block::toString() const
     return oss.str();
 }
 
+void Block::setNonce(int nonce)
+{
+    this->nonce = nonce;
+}
+
 std::string Block::hash() const
 {
-    return Utils::hash(previousHash + timestamp + calculateMerkleTreeRootHash());
+    return Utils::hash(previousHash + timestamp + std::to_string(nonce) + calculateMerkleTreeRootHash());
 }
 
 void Block::addTransaction(const Transaction& transaction)
