@@ -15,6 +15,10 @@ public:
 	bool receive(Node sender, const Block& block, const std::string& signature);
 	Wallet getWallet() const;
 	Block mine(Block block);
+	void sync();
+	void attack();
+public:
+	static inline std::vector<Node> nodes;
 private:
 	Blockchain blockchain;
 	Wallet wallet;
