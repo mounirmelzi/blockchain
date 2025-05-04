@@ -14,6 +14,7 @@ public:
 	std::pair<Block, std::string> broadcast(std::string previousHash);
 	bool receive(Node sender, const Block& block, const std::string& signature);
 	Wallet getWallet() const;
+	Block mine(Block block);
 private:
 	Blockchain blockchain;
 	Wallet wallet;

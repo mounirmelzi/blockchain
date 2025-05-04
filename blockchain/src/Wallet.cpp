@@ -44,5 +44,5 @@ void Wallet::setBalance(double balance)
 
 std::string Wallet::hash() const
 {
-	return Utils::hash(publicKey + privateKey + std::to_string(balance));
+	return Utils::hash(publicKey + privateKey);
 }

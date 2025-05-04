@@ -8,6 +8,48 @@
 Blockchain blockchain;
 constexpr int nodesSize = 4;
 
+static void sync(Node& sender, std::vector<Node>& nodes)
+{
+    std::promise<Node> nodePromise;
+    std::promise<Block> blockPromise;
+
+    auto [block, signature] = sender.broadcast(blockchain.getLastBlock().hash());
+
+    auto validate = [&](Node node) {
+        if (!node.receive(sender, block, signature)) return false;
+        try {
+            blockPromise.set_value(node.mine(block));
+            nodePromise.set_value(node);
+        } catch (std::future_error) {}
+        return true;
+    };
+
+    std::vector<std::future<bool>> futures;
+    for (auto& node : nodes) {
+        futures.push_back(std::async(std::launch::async, validate, node));
+    }
+
+    bool validation = true;
+    for (auto& future : futures) {
+        if (!future.get()) {
+            validation = false;
+            break;
+        }
+    }
+
+    if (validation)
+    {
+        blockchain.addBlock(blockPromise.get_future().get());
+        block.commit();
+
+        std::cout << " + block added by " << nodePromise.get_future().get().getWallet().getPublicKey() << std::endl;
+    }
+    else
+    {
+        std::cout << "block refused" << std::endl;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     Wallet system(1000.0), genesis(0.0);
@@ -32,41 +74,9 @@ int main(int argc, char *argv[])
 
     std::cout << std::endl;
 
-
     nodes[0].send(nodes[1], 10.0);
-    auto [block, signature] = nodes[0].broadcast(blockchain.getLastBlock().hash());
-
-    std::promise<Node> firstNodePromise;
-    auto validate = [&](Node node) {
-        bool result = node.receive(nodes[0], block, signature);
-
-        // todo: mine the received block
-
-        try { firstNodePromise.set_value(node); }
-        catch (...) { }
-        return result;
-    };
-
-    auto future1 = std::async(std::launch::async, validate, nodes[1]);
-    auto future2 = std::async(std::launch::async, validate, nodes[2]);
-    auto future3 = std::async(std::launch::async, validate, nodes[3]);
-
-    bool validation1 = future1.get();
-    bool validation2 = future2.get();
-    bool validation3 = future3.get();
-
-    if (validation1 && validation2 && validation3)
-	{
-        blockchain.addBlock(block);
-        block.commit();
-
-        std::cout << " + block added by " << firstNodePromise.get_future().get().getWallet().getPublicKey() << std::endl;
-	}
-    else
-    {
-        std::cout << "block refuse" << std::endl;
-    }
-
+    nodes[0].send(nodes[2], 20.0);
+    sync(nodes[0], nodes);
 
     std::cout << std::endl;
 

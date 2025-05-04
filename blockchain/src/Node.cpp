@@ -1,5 +1,7 @@
 #include "Node.h"
 #include "Utils.h"
+#include <random>
+#include <limits>
 
 Node::Node(Blockchain blockchain, Wallet wallet) : blockchain(blockchain), wallet(wallet) { }
 
@@ -28,4 +30,25 @@ bool Node::receive(Node sender, const Block& block, const std::string& signature
 Wallet Node::getWallet() const
 {
 	return wallet;
+}
+
+Block Node::mine(Block block)
+{
+	std::string target = "0";
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distribution(1, std::numeric_limits<int>::max());
+
+	while (true)
+	{
+		if (block.hash().substr(0, target.size()) == target)
+		{
+			return block;
+		}
+		else
+		{
+			block.setNonce(distribution(gen));
+		}
+	}
 }
